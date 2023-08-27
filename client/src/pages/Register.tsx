@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api.js';
 
@@ -12,7 +12,7 @@ const Register = () => {
 
   const [errorState, setErrorState] = useState(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserInput(prev => {
       return {
         ...prev,
@@ -21,19 +21,15 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
-      const res = await api.post('/auth/register', userInput);
+      await api.post('/auth/register', userInput);
       navigate('/login');
-      // console.log(res);
-    } catch (e) {
-      // console.log(e);
+    } catch (e: any) {
       setErrorState(e.response.data);
     }
   };
-
-  // console.log('userInput', userInput);
 
   return (
     <div className="auth">

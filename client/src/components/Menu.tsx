@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import api from '../api.js';
+import { useEffect, useState } from 'react';
+import api from '../api';
 
 // const posts = [
 //   {
@@ -35,22 +34,15 @@ import api from '../api.js';
 //   }
 // ];
 
-const Home = () => {
+const Menu = ({ category }) => {
   const [posts, setPosts] = useState([]);
 
-  const category = useLocation().search;
-
-  // console.log(category);
-
-  const getBlogBodyText = (html) => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    return doc.body.textContent;
-  };
+  console.log(category);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await api.get(`/posts${category}`);
+        const res = await api.get(`/posts/?category=${category}`);
         setPosts(res.data);
       } catch (err) {
         console.log(err);
@@ -60,27 +52,17 @@ const Home = () => {
   }, [category]);
 
   return (
-    <div className="home">
-      <div className="posts">
-        {
-          posts.map(post => (
-            <div className="post" id={post.id}>
-              <div className="img">
-                <img src={`../../server/uploads/${post.img}`} alt="" />
-              </div>
-              <div className="content">
-                <Link to={`/post/${post.id}`}>
-                  <h2>{ post.title }</h2>
-                </Link>
-                <p>{ getBlogBodyText(post.description) }</p>
-                <button>Read more</button>
-              </div>
-            </div>
-          ))
-        }
-      </div>
+    <div className="menu">
+      <h2>Other posts you may like</h2>
+      {posts.map(post => (
+        <div className="post" key={post.id}>
+          <img src={post.img} alt="" />
+          <h3>{post.title}</h3>
+          <button>Read More</button>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default Home;
+export default Menu;

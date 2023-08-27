@@ -81,15 +81,13 @@ export const updatePost = (req, res) => {
 
     const postId = req.params.id;
 
-    const query = 'UPDATE INTO SET `title`=?, `description`=?, `img`=?, `category`=? WHERE `id`=? AND `uid` = ?';
+    const query = 'UPDATE posts SET `title`=?, `description`=?, `img`=?, `category`=? WHERE `id`=? AND `uid` = ?';
 
     const values = [
       req.body.title,
       req.body.description,
       req.body.img,
-      req.body.category,
-      req.body.date,
-      userInfo.id
+      req.body.category
     ];
 
     db.query(query, [...values, postId, userInfo.id], (err, data) => {

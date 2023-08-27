@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../api.js';
-import { AuthContext } from '../context/authContext.jsx';
+import { AuthContext } from '../context/authContext';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,7 +13,7 @@ const Login = () => {
 
   const { currentUser, login } = useContext(AuthContext);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setUserInput(prev => {
       return {
         ...prev,
@@ -23,18 +22,15 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
-      // await api.post('/auth/login', userInput);
       await login(userInput);
       console.log(currentUser);
 
       navigate('/');
-      // console.log(res);
-    } catch (e) {
-      // console.log(e);
-      setErrorState(e.response.data);
+    } catch (error: any) {
+      setErrorState(error.response.data);
     }
   };
 

@@ -6,10 +6,11 @@ import Menu from '../components/Menu';
 import api from '../api';
 import moment from 'moment';
 import { AuthContext } from '../context/authContext';
+import { IPost } from '../../../shared/interface/blog';
 // import DOMPurify from 'dompurify';
 
 const Single = () => {
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState<IPost>();
 
   const location = useLocation();
 
@@ -69,7 +70,7 @@ const Single = () => {
           }}
         ></p> */}
       </div>
-      <Menu category={post.category}/>
+      {post && <Menu category={post.category}/>}
     </div>
   );
 };

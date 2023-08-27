@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import api from '../api';
@@ -7,31 +7,42 @@ import moment from 'moment';
 
 const Write = () => {
   const state = useLocation().state;
-  const [value, setValue] = useState(state?.title || '');
-  const [title, setTitle] = useState(state?.description || '');
-  const [file, setFile] = useState(null);
-  const [category, setCategory] = useState(state?.category || '');
+  const [value, setValue] = useState<string>(state?.title || '');
+  const [title, setTitle] = useState<string>(state?.description || '');
+  const [file, setFile] = useState<File>();
+  const [category, setCategory] = useState<string>(state?.category || '');
 
   console.log(value);
 
   const navigate = useNavigate();
 
-  const upload = async () => {
+  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
+    if(event.target.files) {
+      const file = event.target.files[0];
+      console.log('file', file);
+      setFile(file);
+    }
+  }
+
+  const upload = async (): Promise<string> => {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      const formData: FormData = new FormData();
+      if (file) {
+        formData.append('file', file);
+        console.log('upload.file', file);
+      }
       const res = await api.post('/upload', formData);
       console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);
+      return '';
     }
   };
 
-  const clickPublish = async e => {
-    e.preventDefault();
-    const imgUrl = await upload();
-    console.log('imgUrl', imgUrl);
+  const clickPublish = async (): Promise<void> => {
+    const imgUrl: string = await upload();
+    console.log('imgUrl', imgUrl, 'file', file);
     try {
       state
         ? await api.put(`/posts/${state.id}`, {
@@ -63,7 +74,7 @@ const Write = () => {
           <span>
             <b>Visibility: </b> Public
           </span>
-          <input className="fileUpload" type="file" id='file' name='' onChange={e => setFile(e.target.files[0])}/>
+          <input className="fileUpload" type="file" id='file' name='' onChange={handleFileInput}/>
           <label className="fileLabel" htmlFor="file">Upload image</label>
           <div className='buttons'>
             <button>Save as a draft</button>
