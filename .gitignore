@@ -3,3 +3,5 @@ server/node_modules
 .DS_Store
 settings.json
 server/uploads
+server/yarn-error.log
+server/dist

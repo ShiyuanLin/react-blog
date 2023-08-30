@@ -22,6 +22,13 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    semi: [2, 'always']
+    semi: [2, 'always'],
+    'import/order': [
+      'error',
+      {
+        groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
+        'newlines-between': 'always'
+      }
+    ]
   }
 };

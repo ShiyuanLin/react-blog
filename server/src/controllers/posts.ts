@@ -1,22 +1,28 @@
 import { db } from '../db.js';
-import jwt from 'jsonwebtoken';
+import jwt, { VerifyErrors } from 'jsonwebtoken';
+import { Request, Response } from 'express'
+import { RowDataPacket } from 'mysql2';
 
-export const getPosts = (req, res) => {
+// interface IUserInfo {
+//   id: string,
+// }
+
+export const getPosts = (req: Request, res: Response) => {
   const query = req.query.category
     ? 'SELECT * FROM posts WHERE category=?'
     : 'SELECT * FROM posts';
 
   db.query(query, [req.query.category], (err, data) => {
-    if (err) return res.statu(500).send(err);
+    if (err) return res.status(500).send(err);
 
     return res.status(200).json(data);
   });
 };
 
-export const getPost = (req, res) => {
+export const getPost = (req: Request, res: Response) => {
   const query = 'SELECT p.id, `username`, `title`, `description`, p.img, u.img AS userImage, `category`, `date` FROM users u JOIN posts p ON u.id = p.uid WHERE p.id = ?';
 
-  db.query(query, [req.params.id], (err, data) => {
+  db.query(query, [req.params.id], (err, data: RowDataPacket[]) => {
     if (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -26,11 +32,11 @@ export const getPost = (req, res) => {
   });
 };
 
-export const addPost = (req, res) => {
+export const addPost = (req: Request, res: Response) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json('Not authenticated!');
 
-  jwt.verify(token, 'jwtkey', (err, userInfo) => {
+  jwt.verify(token, 'jwtkey', (err: VerifyErrors | null, userInfo: any) => {
     if (err) return res.status(403).json('Token is not valid!');
 
     const query = 'INSERT INTO posts(`title`, `description`, `img`, `category`, `date`, `uid`) VALUES (?)';
@@ -53,11 +59,11 @@ export const addPost = (req, res) => {
   // res.json('post from controller');
 };
 
-export const deletePost = (req, res) => {
+export const deletePost = (req: Request, res: Response) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json('Not authenticated!');
 
-  jwt.verify(token, 'jwtkey', (err, userInfo) => {
+  jwt.verify(token, 'jwtkey', (err: VerifyErrors | null, userInfo: any) => {
     if (err) return res.status(403).json('Token is not valid!');
 
     const postId = req.params.id;
@@ -71,12 +77,12 @@ export const deletePost = (req, res) => {
   });
 };
 
-export const updatePost = (req, res) => {
+export const updatePost = (req: Request, res: Response) => {
   // res.json('post from controller');
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json('Not authenticated!');
 
-  jwt.verify(token, 'jwtkey', (err, userInfo) => {
+  jwt.verify(token, 'jwtkey', (err: VerifyErrors | null, userInfo: any) => {
     if (err) return res.status(403).json('Token is not valid!');
 
     const postId = req.params.id;
@@ -98,6 +104,6 @@ export const updatePost = (req, res) => {
   });
 };
 
-export const addPosts = (req, res) => {
+export const addPosts = (req: Request, res: Response) => {
   res.json('post from controller');
 };

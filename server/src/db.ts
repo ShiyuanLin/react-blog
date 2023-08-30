@@ -1,6 +1,6 @@
-import mysql from 'mysql2';
+import mysql, { PoolOptions } from 'mysql2';
 
-export const db = mysql.createPool({
+const poolOptions: PoolOptions = {
   host: 'localhost',
   user: 'root',
   password: '0128Zhu!',
@@ -8,7 +8,9 @@ export const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-});
+};
+
+export const db = mysql.createPool(poolOptions);
 
 // Handle connection errors
 db.on('connection', connection => {

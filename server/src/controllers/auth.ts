@@ -1,11 +1,13 @@
 import { db } from '../db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express'
+import { RowDataPacket } from 'mysql2';
 
-export const register = (req, res) => {
+export const register = (req: Request, res: Response) => {
   const query = 'SELECT * FROM users where email = ? or username = ?';
 
-  db.query(query, [req.body.email, req.body.username], (err, data) => {
+  db.query(query, [req.body.email, req.body.username], (err, data: RowDataPacket[]) => {
     if (err) return res.json(err);
     if (data.length > 0) return res.status(409).json('User already exits!');
 
@@ -19,17 +21,17 @@ export const register = (req, res) => {
       hash
     ];
 
-    db.query(insertQuery, [values], (err, data) => {
+    db.query(insertQuery, [values], (err) => {
       if (err) return res.json(err);
       return res.status(200).json('User has been created.');
     });
   });
 };
 
-export const login = (req, res) => {
+export const login = (req: Request, res: Response) => {
   const query = 'SELECT * FROM users WHERE username = ?';
 
-  db.query(query, [req.body.username], (err, data) => {
+  db.query(query, [req.body.username], (err, data: RowDataPacket[]) => {
     if (err) return res.json(err);
     if (data.length === 0) return res.status(404).json('User not found!');
 
@@ -48,7 +50,7 @@ export const login = (req, res) => {
   });
 };
 
-export const logout = (req, res) => {
+export const logout = (req: Request, res: Response) => {
   res.clearCookie('access_token', {
     sameSite: 'none',
     secure: true
