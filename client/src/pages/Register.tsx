@@ -7,7 +7,7 @@ const Register = () => {
   const [userInput, setUserInput] = useState({
     username: '',
     email: '',
-    password: ''
+    password: '',
   });
 
   const [errorState, setErrorState] = useState(null);
@@ -16,7 +16,7 @@ const Register = () => {
     setUserInput(prev => {
       return {
         ...prev,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       };
     });
   };

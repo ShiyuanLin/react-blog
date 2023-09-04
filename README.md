@@ -5,8 +5,9 @@
 
 ### Engineering
 - [x] Fix mysql timeout disconnection
-- [X] Use typescript (Frontend)
+- [x] Use typescript (Frontend)
 - [x] Use typescript (Backend)
+- [x] Fix eslint (Frontend)
 - [ ] Clean test console log
 - [ ] Esacape post description in Signle.tsx file
 - [ ] Add layer for api call (frontend)
@@ -18,7 +19,6 @@
 - [ ] Fix user session (Right now user is easily logged out by jumping between pages)
 - [ ] Fix narrow page cannot be scrolled
 - [ ] Update post image storage
-- [ ] Fix eslint
 
 #### Feature
 - [ ] User profile (Able to add, update profile img)

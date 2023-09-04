@@ -6,7 +6,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [userInput, setUserInput] = useState({
     username: '',
-    password: ''
+    password: '',
   });
 
   const [errorState, setErrorState] = useState(null);
@@ -17,7 +17,7 @@ const Login = () => {
     setUserInput(prev => {
       return {
         ...prev,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       };
     });
   };
